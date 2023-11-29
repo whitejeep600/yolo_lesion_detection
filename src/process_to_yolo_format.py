@@ -1,16 +1,9 @@
+import os
 from pathlib import Path
 
 import pandas as pd
 
-
-EVAL = "eval"
-TRAIN = "train"
-TEST = "test"
-splits = (TRAIN, EVAL, TEST)
-
-IMAGES = "images"
-LABELS = "labels"
-
+from src.constants import TRAIN, EVAL, TEST, LABELS, IMAGES, SPLITS
 
 # In the original data, the numbers 1, 2, 3 correspond to train, eval and test splits,
 # respectively. However, only eval and test are annotated. I don't know why. No, really,
@@ -24,6 +17,11 @@ METADATA_SPLIT_NO_TO_SPLIT = {
 }
 
 
+# Lesion type data is only available for the eval and test set. We cannot train a
+# lesion classifier, so we will only train an untyped lesion detector. For consistency
+# between the train and eval splits, we remove labels from the eval split as well.
+# The labels will still be used on the test set, but only to compare which lesion
+# types are easier/harder to detect.
 class YoloFormatLabel:
     def __init__(
             self,
@@ -38,6 +36,10 @@ class YoloFormatLabel:
         self.width = normalized_width
         self.height = normalized_height
         self.label = label
+
+    def to_text(self, preserve_type: bool):
+        label = self.label if preserve_type else 0
+        return f"{label} {self.center_x} {self.center_y} {self.width} {self.height}"
 
 
 def metadata_to_label(meta: pd.Series) -> YoloFormatLabel:
@@ -74,6 +76,20 @@ def get_labels_and_splits_from_meta(
     return img_id_to_labels, img_id_to_split
 
 
+def write_labels_in_yolo_format(
+        labels: list[YoloFormatLabel],
+        target_path: Path,
+        preserve_type: bool
+) -> None:
+    label_text_representations = [
+        label.to_text(preserve_type) for label in labels
+    ]
+    all_representations = "\n".join(label_text_representations)
+    with open(target_path, "w") as target_file:
+        target_file.write(all_representations)
+    pass
+
+
 def main(
         raw_images_dir: Path,
         metadata_path: Path,
@@ -81,15 +97,15 @@ def main(
 ) -> None:
     target_path.mkdir(parents=True, exist_ok=True)
     split_dirs = {
-        split: target_path / split for split in splits
+        split: target_path / split for split in SPLITS
     }
     for split_dir in split_dirs.values():
         split_dir.mkdir(parents=True, exist_ok=True)
     image_dirs = {
-        split: split_dirs[split] / IMAGES for split in splits
+        split: split_dirs[split] / IMAGES for split in SPLITS
     }
     label_dirs = {
-        split: split_dirs[split] / LABELS for split in splits
+        split: split_dirs[split] / LABELS for split in SPLITS
     }
     for dirs in image_dirs, label_dirs:
         for split_dir in dirs.values():
@@ -107,16 +123,20 @@ def main(
                 img_id = f"{patient}_{study}_{series}_{slice_no}"
                 if img_id not in img_id_to_split.keys():
                     continue
-                print(slice_file)
                 img_labels = img_id_to_labels[img_id]
                 img_split = img_id_to_split[img_id]
-                print(img_id)
-                # copy the image to the target location
-                # write labels
-                #   detype labels if they're in train or eval
 
-    # save auxiliary information to data/yolo_format/{train,eval}/split_data.csv
-    pass
+                target_image_path = image_dirs[img_split] / f"{img_id}.png"
+                os.system(f"cp {slice_file} {target_image_path}")
+
+                untype_or_not = img_split == TEST
+                target_labels_path = label_dirs[img_split] / f"{img_id}.txt"
+                write_labels_in_yolo_format(
+                    img_labels,
+                    target_labels_path,
+                    untype_or_not
+                )
+                print(img_id)
 
 
 if __name__ == '__main__':

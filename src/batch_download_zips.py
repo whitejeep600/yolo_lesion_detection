@@ -71,6 +71,7 @@ links = [
 
 if __name__ == '__main__':
     target_dir = Path("data/raw/images")
+    target_dir.mkdir(exist_ok=True, parents=True)
     for idx, link in enumerate(links):
         filename = f'{target_dir}/images_png_%02d.zip' % (idx + 1)
         print('downloading', filename, '...')
