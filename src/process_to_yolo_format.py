@@ -2,6 +2,7 @@ import os
 from pathlib import Path
 
 import pandas as pd
+from tqdm import tqdm
 
 from src.constants import TRAIN, EVAL, TEST, LABELS, IMAGES, SPLITS
 
@@ -116,7 +117,8 @@ def main(
 
     for batch_dir in raw_images_dir.iterdir():
         batch_subdir = batch_dir / "Images_png"
-        for series_subdir in batch_subdir.iterdir():
+        n_batches = len(list(batch_subdir.iterdir()))
+        for series_subdir in tqdm(batch_subdir.iterdir(), n_total=n_batches):
             patient, study, series = str(series_subdir.name).split("_")
             for slice_file in series_subdir.iterdir():
                 slice_no = slice_file.stem

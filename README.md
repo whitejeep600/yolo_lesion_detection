@@ -2,7 +2,6 @@
 
 todo
 
-download all raw data to pepper
 write label overlaying script
 launch preprocessing to yolo format on pepper
 write yolo training 
