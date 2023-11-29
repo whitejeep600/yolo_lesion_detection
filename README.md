@@ -3,15 +3,14 @@
 todo
 
 download all raw data to pepper
-scp a small part of the data to local
-do some basic data preprocessing 
 write processing to yolo format
-increase image contrast
 write yolo training 
-launch it on pepper
+increase image contrast
+launch training on pepper
 
 Run
 
 src/download_raw_data.sh
 
-to get the unprocessed DeepLesion dataset.
+to get the unprocessed DeepLesion dataset. In addition, after agreeing to DeepLesion's usage
+terms, manually download the DL_info.csv file into the data/raw directory.

@@ -1,0 +1,12 @@
+[tool.poetry]
+name = "mip_project"
+version = "0.0.0"
+description = ""
+authors = ["Antoni Maciag <antoni.maciag1@gmail.com>"]
+readme = "README.md"
+
+
+[tool.poetry.dependencies]
+python = "~3.10"
+
+pandas = "*"
