@@ -115,10 +115,10 @@ def main(
     meta = pd.read_csv(metadata_path)
     img_id_to_labels, img_id_to_split = get_labels_and_splits_from_meta(meta)
 
-    for batch_dir in raw_images_dir.iterdir():
+    n_batches = len(list(raw_images_dir.iterdir()))
+    for batch_dir in tqdm(raw_images_dir.iterdir(), total=n_batches):
         batch_subdir = batch_dir / "Images_png"
-        n_batches = len(list(batch_subdir.iterdir()))
-        for series_subdir in tqdm(batch_subdir.iterdir(), n_total=n_batches):
+        for series_subdir in batch_subdir.iterdir():
             patient, study, series = str(series_subdir.name).split("_")
             for slice_file in series_subdir.iterdir():
                 slice_no = slice_file.stem
