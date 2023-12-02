@@ -18,7 +18,7 @@ def increase_contrast(
 def main(dataset_path: Path):
     split_paths = [dataset_path / split / IMAGES for split in SPLITS]
     for split_path in split_paths:
-        print(f"Increasing contrast for split {split_path.name}")
+        print(f"Increasing contrast for split {split_path.parent.name}")
         n_total = len(list(split_path.iterdir()))
         for img_path in tqdm(split_path.iterdir(), total=n_total):
             low_contrast_img = cv2.imread(str(img_path))

@@ -1,0 +1,13 @@
+path: ../data/yolo_format
+train: train
+val: eval
+
+names:
+  1: bone
+  2: abdomen
+  3: mediastinum
+  4: liver
+  5: lung
+  6: kidney
+  7: soft_tissue
+  8: pelvis
