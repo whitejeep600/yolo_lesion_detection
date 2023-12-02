@@ -2,6 +2,7 @@ from pathlib import Path
 
 import cv2
 import numpy as np
+from tqdm import tqdm
 
 from src.constants import SPLITS, IMAGES
 
@@ -17,7 +18,9 @@ def increase_contrast(
 def main(dataset_path: Path):
     split_paths = [dataset_path / split / IMAGES for split in SPLITS]
     for split_path in split_paths:
-        for img_path in split_path.iterdir():
+        print(f"Increasing contrast for split {split_path.name}")
+        n_total = len(list(split_path.iterdir()))
+        for img_path in tqdm(split_path.iterdir(), total=n_total):
             low_contrast_img = cv2.imread(str(img_path))
             high_contrast_img = increase_contrast(low_contrast_img)
             cv2.imwrite(str(img_path), high_contrast_img)

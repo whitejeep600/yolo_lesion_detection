@@ -2,6 +2,7 @@
 
 todo
 
+increase contrast on pepper
 write label overlaying script
 write yolo training 
 launch training on pepper
