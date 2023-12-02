@@ -3,7 +3,6 @@
 todo
 
 write label overlaying script
-launch preprocessing to yolo format on pepper
 write yolo training 
 launch training on pepper
 write evaluation script (use label overlaying script)
@@ -20,8 +19,8 @@ terms, manually download the DL_info.csv file into the data/raw directory. After
 to set up yolo-format train, eval and test splits, with labels gathered into one file for each
 image, and only images with at least one lesion.
 
-After this step, it is necessary to increase
-the contrast of the images to make them look more natural (and easier to process for YOLO),
+After this step, it is necessary to increase  the contrast of the images to make them look more
+natural (to the human eye and to YOLO),
 since the original images are saved in a peculiar format with a very narrow range of pixel
 intensities. The original data provides a FAQ with instructions on how to increase the intensity;
 however, these instructions don't make sense, so I wrote a simplistic custom algorithm.

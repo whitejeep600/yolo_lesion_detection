@@ -138,7 +138,6 @@ def main(
                     target_labels_path,
                     untype_or_not
                 )
-                print(img_id)
 
 
 if __name__ == '__main__':
