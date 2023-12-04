@@ -7,10 +7,7 @@ from tqdm import tqdm
 from src.constants import EVAL, IMAGES, LABELS, SPLITS, TEST, TRAIN
 
 # In the original data, the numbers 1, 2, 3 correspond to train, eval and test splits,
-# respectively. However, only eval and test are annotated. I don't know why. No, really,
-# I am really curious why a design choice like that was made. One obvious explanation is
-# to save money on annotations. But then why bother labeling anything at all if it's
-# impossible to train a lesion classifier based on the data anyway?
+# respectively. However, only eval and test are annotated.
 METADATA_SPLIT_NO_TO_SPLIT = {1: TRAIN, 2: EVAL, 3: TEST}
 
 
@@ -18,7 +15,7 @@ METADATA_SPLIT_NO_TO_SPLIT = {1: TRAIN, 2: EVAL, 3: TEST}
 # lesion classifier, so we will only train an untyped lesion detector. For consistency
 # between the train and eval splits, we remove labels from the eval split as well.
 # The labels will still be used on the test set, but only to compare which lesion
-# types are easier/harder to detect.
+# types are easier or harder to detect.
 class YoloFormatLabel:
     def __init__(
         self,

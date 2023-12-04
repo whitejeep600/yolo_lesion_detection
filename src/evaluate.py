@@ -17,7 +17,7 @@ from src.label_processing import (
 
 def _get_cv2_format_detections(img_path: Path, model: torch.nn.Module) -> list[CV2FormatLabel]:
     raw_detections = model(img_path)
-    yolo_format_array = raw_detections.xywhn[0].detach().numpy()
+    yolo_format_array = raw_detections.xywhn[0].detach().cpu().numpy()
     yolo_format_array = yolo_format_array[:, [5, 0, 1, 2, 3]]
     detections = labels_yolo_to_cv2_format(yolo_format_array)
     return detections
@@ -74,18 +74,18 @@ def main(
 
     false_positive_rate = n_false_positives / n_all_detections
     per_class_recall = {
-        LABEL_CODE_TO_NAME[label_code]: label_code_to_n_detected[label_code]
-        / label_code_to_n_total[label_code]
+        LABEL_CODE_TO_NAME[label_code]:
+            round(label_code_to_n_detected[label_code] / label_code_to_n_total[label_code], 2)
         if label_code_to_n_total[label_code] != 0
         else None
         for label_code in LABEL_CODE_TO_NAME
     }
-    general_recall = sum(label_code_to_n_detected.values()) / sum(label_code_to_n_total.values())
+    general_recall = round(sum(label_code_to_n_detected.values()) / sum(label_code_to_n_total.values()), 2)
 
     with open(target_metrics_path, "w") as result_file:
         result_file.write(
             f"False positive rate {false_positive_rate}, general recall {general_recall},\n"
-            f"recall per class: {per_class_recall}"
+            f"recall per class: {per_class_recall}\n"
         )
 
 

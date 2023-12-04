@@ -1,14 +1,8 @@
 # yolo_lesion_detection
 
-todo
-
-write evaluation script (use label overlaying script)
-generate some metrics, plots
-download a ~100-img sample of the test set locally, run
-run on the real test split
-write a report
-
-
+This project was developed as an assignment for the Medical Image Processing course at the
+National Taiwan University. Below are instructions on how to reproduce the results. For a
+description of the project's goals and findings, refer to `report.md`.
 
 Run
 
@@ -34,3 +28,8 @@ it is a subdirectory of `yolo_lesion_detection`. After this step, training can b
 with
 
 `$ bash src/train_yolo.sh`
+
+If the resulting weights are saved as `weights/yolov5.pt` (or otherwise the relevant path
+is adjusted in `src/evaluate.py`), it is possible to run the evaluation on the test set,
+which will produce the plots of all the images from the test set (with overlaid labels and
+the model's detections), as well as save some evaluation metrics.
