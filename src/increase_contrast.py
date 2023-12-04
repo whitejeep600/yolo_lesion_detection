@@ -4,12 +4,10 @@ import cv2
 import numpy as np
 from tqdm import tqdm
 
-from src.constants import SPLITS, IMAGES
+from src.constants import IMAGES, SPLITS
 
 
-def increase_contrast(
-        img: np.ndarray
-) -> np.ndarray:
+def increase_contrast(img: np.ndarray) -> np.ndarray:
     img = img.astype(float)
     # Simply normalize the range of pixel image values to [0, 255].
     return ((img - img.min()) / (img.max() - img.min()) * 255).astype(int)
@@ -26,6 +24,6 @@ def main(dataset_path: Path):
             cv2.imwrite(str(img_path), high_contrast_img)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     dataset_path = Path("data/yolo_format")
     main(dataset_path)

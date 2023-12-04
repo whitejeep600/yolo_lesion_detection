@@ -1,3 +1,13 @@
+[tool.black]
+line-length = 100
+target-version = ['py310']
+include = '\.py$'
+exclude = '''
+/(
+  | \.git
+)/
+'''
+
 [tool.poetry]
 name = "mip_project"
 version = "0.0.0"
@@ -5,11 +15,21 @@ description = ""
 authors = ["Antoni Maciag <antoni.maciag1@gmail.com>"]
 readme = "README.md"
 
+[[tool.poetry.source]]
+name = "torchcpu"
+url = "https://download.pytorch.org/whl/cpu/"
+priority = "supplemental"
 
 [tool.poetry.dependencies]
 python = "~3.10"
+torch = { version = "2.0.1+cpu", source = "torchcpu" }
+torchvision = { version = "0.15.2+cpu", source = "torchcpu" }
 
 pandas = "*"
 tqdm = "*"
 opencv-python = "*"
 ultralytics = "*"
+black = "*"
+flake8 = "*"
+isort = "*"
+mypy = "*"
