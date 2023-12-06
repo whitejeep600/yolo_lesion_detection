@@ -15,7 +15,7 @@ which the professionals' time is costly and - in many regions - in short supply.
 
 Motivated by the above, I have decided to check the efficacy of applying Deep Learning methods
 (as of 2023, the undisputed state-of-the-art solution in virtually all detection and
-classification tasks) to automatically detecting lesions in medical images.
+classification tasks) to automatic detection of lesions in medical images.
 
 ## Dataset
 
@@ -29,8 +29,8 @@ tissue they appear in. The types are: abdomen, mediastinum, liver, lung,
 kidney, soft tissue, bone, and pelvis (apparently not a bone). The labeling, however, has two 
 drawbacks:
 
-- labels correspond to the type of tissue, and not to the kind of lesion itself (like tumor,
-- mechanical damage, wound, fracture). I imagine
+- labels correspond to the type of tissue, and not to the kind of lesion itself (like tumor, 
+mechanical damage, wound, fracture). I imagine
 a medical professional would be more interested in determining the kind of the lesion, and
 thus its seriousness, potential treatment etc. They hopefully know what they are photographing
 anyway, so the tissue of the lesion is not a useful bit of additional information.
@@ -66,13 +66,13 @@ batch size of 64.
 Note that the training was not run directly on images from the DeepLesion dataset. Preprocessing
 to the format expected by YOLO had to be done, and in addition, I had to increase the contrast
 of the images (this problem is also mentioned on the dataset's website). For more detailed
-descriptions of these steps, refer to `README.md` (or the code, after all it describes best
+descriptions of these steps, please refer to `README.md` (or the code, after all it describes best
 what it's doing).
 
 ## Results
 
 First of all it has to be said that the results turned out not to be sufficiently good
-for any kind of medical application. Below I will try to analyze what the reasons could be 
+for any kind of medical application. Below I will try to analyze what the reasons could be,
 and draw some conclusions.
 
 The recall on the test set was 0.43, and the false positive rate was 0.54. Dividing by tissue
@@ -102,9 +102,9 @@ corresponding to the same 3D lesion in different slices are labeled differently 
 slices. I have included an example of this as the `images/inconsistent{1,2}.png` images. These
 are images from the dataset with overlaid labels (blue) and model predictions (red in this case,
 green if they were correct). The region labeled as a lesion in `inconsistent2.png` also appears
-(smaller) in the other picture, where we can actually see the model's prediction. However,
-the lesion is no longer labeled as such there. If I am correct, such noisy labels can interfere
-with both the training and the evaluation of the model.
+(partly) in the other picture, where we can actually see the model's prediction. However,
+the lesion is no longer labeled as such in that picture. If I am correct, such noisy labels can
+interfere with both the training and the evaluation of the model.
 - problem hardness, simply. Looking at the images from the dataset, it is not immediately clear
 to the human (if unqualified) eye where the lesion is and even with the annotation, it is
 not always obvious how the professional spotted the lesion and what makes it different
@@ -122,12 +122,14 @@ stretched between 0 and 255, so as wide as possible. What I mean by "small" here
 only a few different values from that range are assumed). It is possible the performance
 would improve with images closer to the original ones. Further evidence for this is that some
 lesions are not visible to at all - vide `images/sneaky_lesion.png`. I guess the annotating
-professional must have access to a higher-contrast image to make the annotation.
+professional must have had access to a higher-contrast image to make the annotation.
 - model pretraining. The YOLO model was not pretrained to deal with gray medical images
 representing 2D slices of the human body, but to deal with images of 3D scenes from the real
 world (I mean the world as it appears to human eyes). Therefore, this project represents a bit
 of a domain adaptation problem, in which case a performance drop in comparison
 to the original domain is absolutely expected.
 
-To conclude the report with a bit of a more optimistic note, under `images/correct{1,2}` we can
-see two cases in which the model's predictions were actually correct.
+To conclude the report on a bit of a more optimistic note, under `images/correct{1,2}` we can
+see two cases in which the model's predictions were actually correct. Still, it is not immediately
+clear what made the model arrive at them, and how the regions detected as lesions are different
+from other parts of the images.
